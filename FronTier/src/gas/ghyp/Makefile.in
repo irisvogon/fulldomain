@@ -1,0 +1,35 @@
+name = ghyp
+GAS_C_OBJECTS = ggodunov.$(OBJEXT) \
+ghyperbolic.$(OBJEXT) \
+ghypvec.$(OBJEXT)  \
+glf.$(OBJEXT) \
+glw.$(OBJEXT) \
+gplm.$(OBJEXT) \
+gweno.$(OBJEXT) \
+gcgrsolve.$(OBJEXT)  \
+grsolve.$(OBJEXT) \
+ghypprt.$(OBJEXT) \
+ghypsub.$(OBJEXT) \
+gmoc.$(OBJEXT) \
+gtvd.$(OBJEXT) \
+gvisc.$(OBJEXT) \
+lex.yy.$(OBJEXT) \
+gchem.$(OBJEXT)
+
+GAS_F_OBJECTS = gflw.$(OBJEXT) \
+
+
+###########################################################################
+#DO NOT MODIFY BELOW THIS LINE UNLESS YOUR POSITIVE YOU KNOW WHAT YOU WANT TO DO
+###########################################################################
+libext = @libext@
+CC = @ccft@
+F77 = @f77ft@
+OBJEXT = @OBJEXT@
+gasincs = @gasincs@
+build_cpu = @build_cpu@
+RANLIB = @RANLIB@
+extras =  
+
+@gasbuild@
+

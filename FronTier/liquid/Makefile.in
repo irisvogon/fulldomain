@@ -1,0 +1,52 @@
+CC = @ccft@
+F77 = @f77ft@
+libext = @libext@
+incs =  @exampleincs@
+libincs = @otherlibsinc@
+libs = @otherlibs@
+build_cpu = @build_cpu@
+incsloc = -I. -I../include
+
+PETSC = yes
+PETSC_ARCH = @build_os@-c-debug
+
+PETSC_DIR=@petscdir@
+Petsc_Include   = -I${PETSC_DIR}/include -I${PETSC_DIR}/bmake/${PETSC_ARCH}
+Petsc_Lib      = -lblas -llapack -L${PETSC_DIR}/lib/${PETSC_ARCH} -lpetscksp -lpetscdm -lpetscmat -lpetscvec -lpetsc -ldl -lg2c -lm -L/usr/X11R6/lib -lX11
+
+liquid : @devel@
+
+larray.o : liquid.h larray.c
+	-${CC} -g -c larray.c -Dfloat=double $(incsloc) $(incs) ${Petsc_Include}
+
+lpetsc.o : liquid.h lpetsc.c
+	-${CC} -g -c lpetsc.c -Dfloat=double $(incsloc) $(incs) ${Petsc_Include}
+
+lcartsn.o : liquid.h lcartsn.c
+	-${CC} -c lcartsn.c -g -Dfloat=double $(incsloc) $(incs) ${Petsc_Include}
+
+ladvect.o : liquid.h ladvect.c
+	-${CC} -c ladvect.c -g -Dfloat=double $(incsloc) $(incs) ${Petsc_Include}
+
+liquid: liquid.h liquid.c larray.o lpetsc.o lcartsn.o ladvect.o lpetsc.o
+	-${CC} -c liquid.c -g -Dfloat=double -I../include $(incs) ${Petsc_Include}
+	$(F77) -o liquid liquid.o -g -I../include -L../lib/${build_cpu}  lpetsc.o lcartsn.o ladvect.o larray.o ${Petsc_Lib} -L../lib/${build_cpu} -lFronTier $(libincs)  $(libs)
+
+include ../devel-deps.inc
+
+clean:
+	rm -rf *.o example 
+output :
+	rm -rf out/*
+
+gif :
+	hdf2gif out/intfc.hdf out/intfc.gif
+
+TagsFile:
+	ctags *.[ch] ../src/front/*.[ch] ../src/intfc/*.[ch] ../src/util/*.[ch]
+
+tagsfile:
+	ctags *.[ch] ../src/front/*.[ch] ../src/intfc/*.[ch] ../src/util/*.[ch]
+
+etagsfile:
+	etags *.[ch] ../src/front/*.[ch] ../src/intfc/*.[ch] ../src/util/*.[ch]

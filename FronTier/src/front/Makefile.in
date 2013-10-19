@@ -1,0 +1,145 @@
+name = front
+FT_C_OBJECTS = fredist2d.$(OBJEXT) \
+fadv.$(OBJEXT) \
+fbdry1.$(OBJEXT) \
+fbdry2.$(OBJEXT) \
+fbdry3.$(OBJEXT) \
+fbdry4.$(OBJEXT) \
+fcheck3d.$(OBJEXT) \
+fcorrspnd.$(OBJEXT) \
+fcrosscur.$(OBJEXT) \
+fcrossext.$(OBJEXT) \
+fcrstatus.$(OBJEXT) \
+fdiagnostic.$(OBJEXT) \
+fgb2d.$(OBJEXT) \
+fgb3dutil.$(OBJEXT) \
+fgb3d.$(OBJEXT) \
+fgb3comp.$(OBJEXT) \
+fgrid.$(OBJEXT) \
+finit.$(OBJEXT) \
+fint.$(OBJEXT) \
+fnode.$(OBJEXT) \
+fnodesub.$(OBJEXT) \
+fprint.$(OBJEXT) \
+fprop2d.$(OBJEXT) \
+fprop3d.$(OBJEXT) \
+fredist.$(OBJEXT) \
+fredist3d.$(OBJEXT) \
+frp1.$(OBJEXT) \
+frp2.$(OBJEXT) \
+fscatter.$(OBJEXT) \
+fredist1d.$(OBJEXT) \
+fscat1d.$(OBJEXT) \
+fscat2d.$(OBJEXT) \
+fscat3d1.$(OBJEXT) \
+fscat3d2.$(OBJEXT) \
+fstate2d.$(OBJEXT) \
+fstate.$(OBJEXT) \
+ftop.$(OBJEXT) \
+fsub.$(OBJEXT) \
+funtan2d.$(OBJEXT) \
+funtan3d.$(OBJEXT) \
+fuserintfc.$(OBJEXT) \
+fuserhooks.$(OBJEXT) \
+foverture_patch.$(OBJEXT) \
+foverture_adv.$(OBJEXT)   \
+fvelo.$(OBJEXT)   \
+fmap.$(OBJEXT)   \
+########################################################################################
+# DO NOT MODIFY BELOW THIS LINE UNLESS YOUR POSITIVE YOU KNOW WHAT YOU WANT TO DO 
+########################################################################################
+
+
+CC = @ccft@
+F77 = @f77ft@
+libext = @libext@
+OBJEXT = @OBJEXT@
+ftlibincs = @ftlibincs@
+build_cpu = @build_cpu@
+RANLIB = @RANLIB@
+incs = @exampleincs@
+libincs = @otherlibsinc@
+libs = @otherlibs@
+
+
+
+all: FORCE
+	cd ../intfc; $(MAKE)
+	cd ../util; $(MAKE)
+	-rm ../../lib/$(build_cpu)/libFronTier.a
+	$(MAKE) ../../lib/$(build_cpu)/libFronTier.a
+
+
+../../lib/$(build_cpu)/libFronTier.a: ../../lib/$(build_cpu)/lib$(name)$(libext).a
+	cd ../intfc/; $(MAKE)
+	cd ../../lib/$(build_cpu)/; rm -rf *.o; ar x libintfc.a; ar x libutil.a; ar x libfront.a; ar cru libFronTier.a *.o; ranlib libFronTier.a;  rm -rf *.o
+
+@ftbuild@
+
+clean:
+	cd  $(build_cpu)/; rm -rf *.o
+	cd ../intfc; $(MAKE) clean
+tagsfile:
+	ctags ../intfc/*.c ../util/*.c *.c ../intfc/*.h ../util/*.h *.h
+
+$(build_cpu)/testfront.o:testfront.c
+	$(CC) $(ftlibincs) $(incs) -c testfront.c -o $(build_cpu)/testfront.o
+testfront: FORCE
+	$(MAKE)
+	$(MAKE) $(build_cpu)/testfront.o 
+	$(CC) $(build_cpu)/testfront.o -L../../lib/$(build_cpu) $(libincs) -lfront$(libext) -lintfc$(libext) -lutil$(libext) $(libs) -lm -o testfront
+
+FORCE: 
+
+tar:
+	-mkdir in
+	-cd ../intfc; mkdir in
+	-cd testfront; rm *.sc 
+	cd ../../../; tar -cf "`date +FronTier.Lite.%m_%d_%y.tar`"  \
+FronTier/README \
+FronTier/configure \
+FronTier/configure.in \
+FronTier/Makefile.in \
+FronTier/src/Makefile.in \
+FronTier/README \
+FronTier/install-sh \
+FronTier/config.status \
+FronTier/config.sub \
+FronTier/config.guess \
+FronTier/example/*.c \
+FronTier/example/Makefile.in \
+FronTier/example3d/*.c \
+FronTier/example3d/Makefile.in \
+FronTier/subsurf/*.c \
+FronTier/subsurf/Makefile.in \
+FronTier/crystal/*.c \
+FronTier/crystal/Makefile.in \
+FronTier/liquid/*.c \
+FronTier/liquid/*.h \
+FronTier/liquid/Makefile.in \
+FronTier/poison/*.c \
+FronTier/poison/*.h \
+FronTier/poison/Makefile.in \
+FronTier/testfront/*.c \
+FronTier/testfront/in/* \
+FronTier/testfront/Makefile.in \
+FronTier/src/util/mkdep.pl \
+FronTier/src/util/mkfiles.pl \
+FronTier/src/util/ftrules \
+FronTier/src/util/gasrules \
+FronTier/src/intfc/*.c \
+FronTier/src/intfc/*.h  \
+FronTier/src/intfc/in \
+FronTier/src/intfc/Makefile.in \
+FronTier/src/intfc/in \
+FronTier/src/util/*.h \
+FronTier/src/util/*.c \
+FronTier/src/util/Makefile.in \
+FronTier/src/front/*.c \
+FronTier/src/front/*.h \
+FronTier/src/front/Makefile.in \
+FronTier/src/front/in \
+FronTier/devel-deps.inc.in
+	cd ../../../; gzip "`date +FronTier.Lite.%m_%d_%y.tar`"
+	cd ../../../; mv `date +FronTier.Lite.%m_%d_%y.tar`.gz FronTier/	
+

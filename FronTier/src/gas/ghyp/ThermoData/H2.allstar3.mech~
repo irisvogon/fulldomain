@@ -1,0 +1,30 @@
+let allowed atoms be h, o, N.
+let additional species be N2.
+let temperature exponent be n_k.
+let order of reaction be n.
+let units for A be [ cm^(3(n-1)) / ( ms * mole^(n-1) * K^n_k ) ] . 	/* units modified from second to millisecond */
+let units for E be [ J / mole ].	/* units modified from KJ to J */
+
+
+
+1f: O2 + H            -> OH + O                { a = 2.000E+11	n = 0	E = 70300	}
+2f: H2 + O            -> OH + H                { a = 5.060E+01	n = 2.67	E = 26300	}
+3f: H2 + OH           -> H2O + H               { a = 1.000E+05	n = 1.6	E = 13800	}
+4f: OH + OH           -> H2O + O               { a = 1.500E+06	n = 1.14	E = 420	}
+5f: H + H + M'        -> H2 + M'               { a = 1.800E+15	n = -1	E = 0	}
+6f: O + O + M'        -> O2 + M'               { a = 2.900E+14	n = -1	E = 0	}
+7f: H + OH + M'       -> H2O + M'              { a = 2.200E+19	n = -2	E = 0	}
+8f: H + O2 + M'       -> HO2 + M'              { a = 2.300E+15	n = -0.8	E = 0	}
+9f: HO2 + H           -> OH + OH               { a = 1.500E+11	n = 0	E = 4200	}
+10f: HO2 + H          -> H2 + O2               { a = 2.500E+10	n = 0	E = 2900	}
+11f: HO2 + H          -> H2O + O               { a = 3.000E+10	n = 0	E = 7200	}
+12f: HO2 + O          -> OH + O2               { a = 1.800E+10	n = 0	E = -1700	}
+13f: HO2 + OH         -> H2O + O2              { a = 6.000E+10	n = 0	E = 0	}
+14f: HO2 + HO2        -> H2O2 + O2             { a = 2.500E+8	n = 0	E = -5200	}
+15f: OH + OH + M'     -> H2O2 + M'             { a = 3.250E+19	n = -2	E = 0	}
+16f: H2O2 + H         -> H2 + HO2              { a = 1.700E+09	n = 0	E = 15700	}
+17f: H2O2 + H         -> H2O + OH              { a = 1.000E+10	n = 0	E = 1500	}
+18f: H2O2 + O         -> OH + HO2              { a = 2.803E+10	n = 0	E = 26800	}
+19f: H2O2 + OH        -> H2O + HO2             { a = 5.400E+09	n = 0	E = 4200	}
+
+let [M'] = 1.0 [OTHER].

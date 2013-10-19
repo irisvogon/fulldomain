@@ -1,0 +1,18 @@
+CC = @ccft@
+libext = @libext@
+incs =  @exampleincs@
+libincs = @otherlibsinc@
+libs = @otherlibs@
+
+
+subsurf: @devel@ subsurf.c
+	rm -f subsurf
+	$(CC) -c -g -Dfloat=double -I../include $(incs) subsurf.c
+	$(CC) subsurf.o -g -I../include -L../lib/@build_cpu@  $(libincs) -lFronTier -lm $(libs) -o subsurf
+clean:
+	rm -rf *.o subsurf 
+tagsfile:
+	ctags *.[chf] ../src/*/*.[chf]
+
+
+include ../devel-deps.inc

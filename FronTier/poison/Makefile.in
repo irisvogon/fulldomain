@@ -1,0 +1,39 @@
+CC = @ccft@
+F77 = @f77ft@
+libext = @libext@
+incs =  @exampleincs@
+libincs = @otherlibsinc@
+libs = @otherlibs@
+build_cpu = @build_cpu@
+
+PETSC = yes
+PETSC_ARCH = @build_os@-c-debug
+
+PETSC_DIR=@petscdir@
+Petsc_Include   = -I${PETSC_DIR}/include -I${PETSC_DIR}/bmake/${PETSC_ARCH}
+Petsc_Lib      = -lblas -llapack -L${PETSC_DIR}/lib/${PETSC_ARCH} -lpetscksp -lpetscdm -lpetscmat -lpetscvec -lpetsc -ldl -lg2c -lm -L/usr/X11R6/lib -lX11
+
+poison : @devel@
+
+lpetsc.o : lpetsc.c poison.h
+	-${CC} -c lpetsc.c -g -Dfloat=double -I. -I../include $(incs) ${Petsc_Include}
+
+poison.o : poison.c poison.h
+	-${CC} -c poison.c -g -Dfloat=double -I. -I../include $(incs) ${Petsc_Include}
+
+poison: poison.o lpetsc.o
+	$(F77) -o poison poison.o -g -I../include -L../lib/${build_cpu}  lpetsc.o ${Petsc_Lib} -L../lib/${build_cpu} -lFronTier $(libincs)  $(libs)
+
+include ../devel-deps.inc
+
+clean:
+	rm -rf *.o poison
+
+TagsFile:
+	ctags *.[ch] ../src/front/*.[ch] ../src/intfc/*.[ch] ../src/util/*.[ch]
+
+tagsfile:
+	ctags *.[ch] ../src/front/*.[ch] ../src/intfc/*.[ch] ../src/util/*.[ch]
+
+etagsfile:
+	etags *.[ch] ../src/front/*.[ch] ../src/intfc/*.[ch] ../src/util/*.[ch]

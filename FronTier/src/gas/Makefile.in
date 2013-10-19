@@ -1,0 +1,182 @@
+libext = @libext@
+CC = @ccft@
+F77 = @f77ft@
+	
+gas_all:
+	cd ../pak && $(MAKE)
+	cd ../front && $(MAKE)
+	cd ../util && $(MAKE)
+	cd ../intfc && $(MAKE)
+	cd ../tri && $(MAKE)
+	cd ../hyp && $(MAKE)
+	cd ../driver && $(MAKE)
+	cd gbifur && $(MAKE)
+	cd geos   && $(MAKE)
+	cd ghyp   && $(MAKE)
+	cd ginit  && $(MAKE)
+	cd gintfc && $(MAKE)
+	cd gnode  && $(MAKE)
+	cd gprop  && $(MAKE)
+	cd gprt   && $(MAKE)
+	cd gstate && $(MAKE)
+	$(MAKE) gas
+clean:
+	cd ../driver && $(MAKE) clean
+	cd ../front && $(MAKE) clean
+	cd ../intfc && $(MAKE) clean
+	cd ../tri && $(MAKE) clean
+	cd ../hyp && $(MAKE) clean
+	cd ../util && $(MAKE) clean
+	cd ../pak && $(MAKE) clean
+	cd gbifur && $(MAKE) clean
+	cd geos   && $(MAKE) clean
+	cd ghyp	  && $(MAKE) clean
+	cd ginit  && $(MAKE) clean
+	cd gintfc && $(MAKE) clean
+	cd gnode  && $(MAKE) clean
+	cd gprop  && $(MAKE) clean
+	cd gprt   && $(MAKE) clean
+	cd gstate  && $(MAKE) clean
+	rm -rf @build_cpu@/gas
+	rm -rf @build_cpu@/gas-main.o
+diff:
+	cd gbifur && $(MAKE) diff 
+	cd geos   && $(MAKE) diff
+	cd ghyp   && $(MAKE) diff
+	cd ginit  && $(MAKE) diff
+	cd gintfc && $(MAKE) diff
+	cd gnode  && $(MAKE) diff
+	cd gprop  && $(MAKE) diff
+	cd gprt   && $(MAKE) diff
+	cd gstate && $(MAKE) diff
+
+build_cpu = @build_cpu@
+
+gas@EXEEXT@: @build_cpu@/gas-main.o
+	$(F77)  @build_cpu@/gas-main.o  -L../../lib/@build_cpu@ -L../../lib/@build_cpu@/gas -L../others @otherlibsinc@  -lginit$(libext)  -lgprt$(libext)  -lgbifur$(libext)  -lgnode$(libext)  -lghyp$(libext)  -lgprop$(libext)  -lgstate$(libext)  -lgeos$(libext)  -lgintfc$(libext) -ldriver$(libext)  -lhyp$(libext)  -ltri$(libext)  -lfront$(libext)  -lintfc$(libext)  -lodepack  -ldierckx -lutil$(libext) -lm -llinpak -lblas -lstdc++ @otherlibs@ -o @build_cpu@/gas@EXEEXT@
+
+#make.dep.u:
+	
+
+
+$(build_cpu)/gas-main.o: $(build_cpu) gas-main.c
+	$(CC) -I. -I../ -I../util @gasincs@ -c gas-main.c -o $(build_cpu)/gas-main.o
+
+$(build_cpu):
+	-mkdir $(build_cpu)
+tagsfile:
+	ctags ../driver/*.c ../driver/*.h ../hyp/*.c ../hyp/*.h ../intfc/*.c ../intfc/*.h ../util/*.c ../util/*.h ../tri/*.c ../tri/*.h ../front/*.c ../front/*.h gbifur/*.c gbifur/*.h geos/*.c geos/*.h ghyp/*.c ghyp/*.h ginit/*.c ginit/*.h gintfc/*.c gintfc/*.h gnode/*.c gnode/*.h gprop/*.c gprop/*.h gprt/*.c gprt/*.h gstate/*.c gstate/*.h gdecs/*.h 
+
+tar:
+	-mkdir in
+	-cd ../intfc; mkdir in
+	-cd ../front; mkdir in
+	-rm -rf ../front/in/*.sc
+	-rm -rf ../../testfront/in/*.sc
+	cd ../../../; tar -cf "`date +FronTier.gas.%m_%d_%y.tar`" \
+FronTier/README \
+FronTier/install-sh \
+FronTier/config.status \
+FronTier/config.sub \
+FronTier/config.guess \
+FronTier/devel-deps.inc.in \
+FronTier/src/util/mkdep.pl \
+FronTier/src/util/mkfiles.pl \
+FronTier/src/util/ftrules \
+FronTier/src/util/gasrules \
+FronTier/src/pak/Makefile.in \
+FronTier/src/pak/odepack/Makefile.in \
+FronTier/src/pak/odepack/*.f \
+FronTier/src/pak/odepack/*.c \
+FronTier/src/pak/dierckx/Makefile.in \
+FronTier/src/pak/dierckx/*.f \
+FronTier/src/pak/linpak/Makefile.in \
+FronTier/src/pak/linpak/*.f \
+FronTier/src/pak/blas/Makefile.in \
+FronTier/src/pak/blas/*.f \
+FronTier/configure \
+FronTier/configure.in \
+FronTier/Makefile.in \
+FronTier/src/Makefile.in \
+FronTier/example/*.c \
+FronTier/example/Makefile.in \
+FronTier/example3d/*.c \
+FronTier/example3d/Makefile.in \
+FronTier/subsurf/*.c \
+FronTier/subsurf/Makefile.in \
+FronTier/crystal/*.c \
+FronTier/crystal/Makefile.in \
+FronTier/liquid/*.c \
+FronTier/liquid/*.h \
+FronTier/liquid/Makefile.in \
+FronTier/poison/*.c \
+FronTier/poison/*.h \
+FronTier/poison/Makefile.in \
+FronTier/testfront/*.c \
+FronTier/testfront/Makefile.in \
+FronTier/testfront/in/* \
+FronTier/src/intfc/*.c \
+FronTier/src/intfc/*.h  \
+FronTier/src/intfc/in \
+FronTier/src/intfc/Makefile.in \
+FronTier/src/util/*.h \
+FronTier/src/util/*.c \
+FronTier/src/util/Makefile.in \
+FronTier/src/front/*.c \
+FronTier/src/front/*.h \
+FronTier/src/front/in \
+FronTier/src/front/Makefile.in \
+FronTier/src/tri/*.c \
+FronTier/src/tri/*.h \
+FronTier/src/tri/Makefile.in \
+FronTier/src/driver/Makefile.in \
+FronTier/src/driver/*.c \
+FronTier/src/driver/*.h \
+FronTier/src/hyp/Makefile.in \
+FronTier/src/hyp/*.c \
+FronTier/src/hyp/*.h \
+FronTier/src/gas/Makefile.in \
+FronTier/src/gas/gbifur/Makefile.in \
+FronTier/src/gas/gbifur/*.c \
+FronTier/src/gas/gbifur/*.h \
+FronTier/src/gas/geos/Makefile.in \
+FronTier/src/gas/geos/*.F \
+FronTier/src/gas/geos/*.c \
+FronTier/src/gas/geos/*.h \
+FronTier/src/gas/geos/helm_table.dat \
+FronTier/src/gas/geos/vector_eos.dek \
+FronTier/src/gas/ginit/Makefile.in \
+FronTier/src/gas/ginit/*.c \
+FronTier/src/gas/ginit/*.h \
+FronTier/src/gas/gnode/Makefile.in \
+FronTier/src/gas/gnode/*.c \
+FronTier/src/gas/gnode/*.h \
+FronTier/src/gas/gprt/Makefile.in \
+FronTier/src/gas/gprt/*.c \
+FronTier/src/gas/gprt/*.h \
+FronTier/src/gas/gdecs/*.h \
+FronTier/src/gas/ghyp/Makefile.in \
+FronTier/src/gas/ghyp/*.c \
+FronTier/src/gas/ghyp/*.F \
+FronTier/src/gas/ghyp/*.h \
+FronTier/src/gas/ghyp/ThermoData/* \
+FronTier/src/gas/gintfc/Makefile.in \
+FronTier/src/gas/gintfc/*.c \
+FronTier/src/gas/gintfc/*.h \
+FronTier/src/gas/gprop/Makefile.in \
+FronTier/src/gas/gprop/*.c \
+FronTier/src/gas/gprop/*.h \
+FronTier/src/gas/gstate/Makefile.in \
+FronTier/src/gas/gstate/*.c \
+FronTier/src/gas/gstate/*.h \
+FronTier/src/gas/gas-main.c \
+FronTier/src/gas/in/* \
+FronTier/src/gas/pvelin*.plt \
+FronTier/src/gas/blas.data \
+FronTier/src/gas/batesgri.therm \
+FronTier/src/pak/hypre-1.6.0.tar.gz \
+FronTier/src/pak/sn_ellip/*.C \
+FronTier/src/pak/sn_ellip/*.h \
+FronTier/src/pak/sn_ellip/Makefile.in
+	cd ../../../; gzip "`date +FronTier.gas.%m_%d_%y.tar`"; mv `date +FronTier.gas.%m_%d_%y.tar.gz` FronTier/.;
+
